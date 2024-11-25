@@ -17,7 +17,7 @@ const RippleFab = styled(Fab)<{ isBlinking: boolean }>(
   })
 );
 
-export default function RippleComp ({ location, getLocationData }: any) {
+export default function RippleComp({ location, getLocationData }: any) {
   const [isVisible, setIsVisible] = useState(true);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [open, setOpen] = useState<any>(false); // State to manage dialog visibility
@@ -28,7 +28,7 @@ export default function RippleComp ({ location, getLocationData }: any) {
   const handleDisableConfirm = async () => {
     try {
       const response = await fetch(
-       `https://apitrack.psiborg.io/device/sos-off/${location?.device?._id}`,
+        `https://apitrack.psiborg.io/api/device/sos-off/${location?.device?._id}`,
         {
           method: "PATCH",
           headers: {
