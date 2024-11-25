@@ -1,0 +1,78 @@
+.react-tel-input .form-control {
+  width: 100% !important;
+  height: 45px !important;
+}
+.customSearch {
+  .css-1kvivc8-MuiInputBase-root-MuiOutlinedInput-root {
+    border-radius: 50px !important;
+    background-color: #eef5f9 !important;
+  }
+  .css-12s59py {
+    border-radius: 50px !important;
+    background-color: #eef5f9 !important;
+  }
+}
+.customChip {
+  border-radius: 30px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 8px !important;
+  color: white !important;
+  cursor: pointer;
+}
+.activeGreen {
+  background-color: #8bd040 !important;
+}
+.activeOrg {
+  background-color: #fcbe2d !important;
+}
+.activeRed {
+  background-color: #e40203 !important;
+}
+.TabStyleAddDevice {
+  border-radius: 7px !important;
+  background: #6d6ed1 !important;
+  padding: 6px !important;
+  border-radius: 50px !important
+  ;
+}
+.TabChangesDeviceLive {
+  min-width: 100px !important;
+  font-style: normal !important;
+  text-transform: capitalize !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 6px 8px !important;
+  min-height: 35px !important;
+}
+.TabStyleAddDevice .MuiTabs-indicator {
+  width: 0px !important;
+}
+
+.TabStyleAddDevice .MuiTab-textColorInherit.Mui-selected {
+  color: #fff !important;
+}
+
+.TabStTabStyleAddDeviceyle .MuiTab-textColorInherit {
+  color: #6f6f6f !important;
+}
+
+.TabStyleAddDevice .Mui-selected {
+  color: #ffffff !important;
+  background-color: #8bd040 !important;
+}
+@media screen and (min-width: 768px) {
+  .mainLayout {
+    margin-left: 0px !important;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .mainLayout {
+    margin-left: 330px !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .datePicker {
+    width: 100% !important;
+  }
+}

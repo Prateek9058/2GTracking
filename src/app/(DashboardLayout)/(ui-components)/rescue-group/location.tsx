@@ -1,0 +1,44 @@
+import React from "react";
+import { Grid, Typography } from "@mui/material";
+import Googlemap from "@/app/(components)/mui-components/Google_map/Googlemap";
+import markerImg from "../../../../../public/Img/marker.png";
+import useCurrentLocation from "@/app/(libs)/useCurrentLocation";
+import Image from "next/image";
+interface Props {
+  data: any;
+}
+const Location: React.FC<Props> = ({ data }) => {
+  const { location, error } = useCurrentLocation();
+  if (!data) {
+    // Return null or a loading indicator if data is not yet available
+    return (
+      <Grid container mt={4} justifyContent={"center"}>
+        <Typography variant="h4"> No data found</Typography>
+      </Grid>
+    );
+  }
+  const { lat, lon } = data?.device?.location;
+  const cureentLoc = data?.device?.location?.placeName;
+  console.log(data);
+  return (
+    <Grid container mt={3}>
+      <Grid item xs={12}>
+        <Googlemap data={{ lat, lon, locationName: cureentLoc }} route={null} />
+      </Grid>
+      <Grid container spacing={2} p={2}>
+        <Grid item>
+          <Image src={markerImg} alt={"marker kids terack"} />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4" color="primary">
+            Current Location
+          </Typography>
+          <Typography mb={2} variant="body2" color="info">
+            {cureentLoc ? cureentLoc : "N/A"}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
+export default Location;
