@@ -3,7 +3,8 @@ import { redirectToNotFound } from "./redirect";
 import { signOut } from "next-auth/react";
 
 const axiosInstance = axios.create({
-  baseURL: "https://api.trulynk.org",
+  // baseURL: "https://api.trulynk.org",
+  baseURL: "https://apitrack.psiborg.io",
   // baseURL: "http://localhost:5000",
 });
 
