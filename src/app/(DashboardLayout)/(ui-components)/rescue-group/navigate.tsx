@@ -80,11 +80,16 @@ const Navigate: React.FC<Props> = ({ data }) => {
                 },
               }}
             >
+              {" "}
               <Typography variant="h4" color="primary">
-                Kid Location
+                Device Location
               </Typography>
-              <Typography mb={2} variant="body2" color="info">
+              <Typography mb={0.5} variant="body2" color="info">
                 {currentLoc ? currentLoc : "N/A"}
+              </Typography>
+              <Typography variant="h5" color="primary">
+                Type :
+                {data?.device?.location?.locType === "SIM_LOC" ? "SIM" : "GPS"}
               </Typography>
             </StepLabel>
           </Step>

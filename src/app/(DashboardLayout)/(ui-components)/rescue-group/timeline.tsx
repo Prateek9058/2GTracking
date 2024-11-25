@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography, Stack } from "@mui/material";
 import Googlemap from "@/app/(components)/mui-components/Google_map/GoogleMapComponentTimeline";
 import useCurrentLocation from "@/app/(libs)/useCurrentLocation";
+import Tabs from "@/app/(components)/mui-components/Tabs/CustomTab";
+import ESim from "./E-sim";
 import TextMobileStepper from "./textMobileStepper";
 import moment from "moment";
 interface DataItem {
@@ -10,8 +12,25 @@ interface DataItem {
 }
 interface Props {
   data: any;
+  handleChange: any;
+  valueTimeline: number;
 }
-const Timeline: React.FC<Props> = ({ data }) => {
+
+interface TabData {
+  label: string;
+}
+
+const tabs: TabData[] = [{ label: "GPS" }, { label: "sim" }];
+
+const Timeline: React.FC<Props> = ({ data, handleChange, valueTimeline }) => {
+  const TabPanelList = [
+    {
+      component: <ESim data={data} />,
+    },
+    {
+      component: <ESim data={data} />,
+    },
+  ];
   const [timeLineLoc, setTimeLineLoc] = useState<any>();
 
   if (!data || data?.filteredLocations?.length === 0 || !location) {
@@ -21,50 +40,18 @@ const Timeline: React.FC<Props> = ({ data }) => {
       </Grid>
     );
   }
-  const waypoints = data.filteredLocations.slice(1, -1).map((item: any) => ({
-    location: new google.maps.LatLng(
-      item.currentValue.lat,
-      item.currentValue.lon
-    ),
-  }));
-  const route = {
-    start: {
-      lat: data.filteredLocations[0].currentValue.lat,
-      lon: data.filteredLocations[0].currentValue.lon,
-      place: data.filteredLocations[0].placeName,
-    },
-    end: {
-      lat: data.filteredLocations[data.filteredLocations.length - 1]
-        .currentValue.lat,
-      lon: data.filteredLocations[data.filteredLocations.length - 1]
-        .currentValue.lon,
-      place:
-        data.filteredLocations[data.filteredLocations.length - 1].placeName,
-    },
-    waypoints,
-  };
+
   return (
-    <Grid container mt={3} gap={2}>
-      <Grid item xs={12} md={8}>
-        <Googlemap route={route} timeLineLoc={timeLineLoc} />
+    <>
+      <Grid mt={2}>
+        <Tabs
+          value={valueTimeline}
+          handleChange={handleChange}
+          tabs={tabs}
+          TabPanelList={TabPanelList}
+        />
       </Grid>
-      <Grid item md={3.8}>
-        <Stack sx={{ width: "100%", bgcolor: "#6D6ED1" }}>
-          <TextMobileStepper
-            steps={data?.filteredLocations?.map((item: any) => ({
-              label: item?.placeName,
-              description: `lat: ${item?.currentValue?.lat}, lon: ${item?.currentValue?.lon}`,
-              timeLineLat: {
-                lat: item?.currentValue?.lat,
-                lon: item?.currentValue?.lon,
-              },
-              timeStamp: moment(item?.createdAt).format("lll"),
-            }))}
-            setTimeLineLoc={setTimeLineLoc}
-          />
-        </Stack>
-      </Grid>
-    </Grid>
+    </>
   );
 };
 export default Timeline;

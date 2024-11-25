@@ -72,6 +72,7 @@ const Googlemap: React.FC<Props> = ({ data, route }) => {
       });
       const infoWindow = new window.google.maps.InfoWindow({
         content: data.locationName || "Unknown location",
+        
       });
       infoWindowRef.current = infoWindow;
       marker.addListener("click", () => {

@@ -24,7 +24,6 @@ import RippleComponent from "@/app/(components)/Ripple";
 import { PiBatteryEmptyFill } from "react-icons/pi";
 import { GiCarBattery } from "react-icons/gi";
 
-
 interface TabData {
   label: string;
 }
@@ -39,18 +38,25 @@ const tabs: TabData[] = [
 const Page = () => {
   const queryParams = useQueryParams();
   const [value, setTabValue] = useState<number>(0);
+  const [valueTimeline, setTabValueTimeline] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [location, setLocation] = useState<any>(null);
   const [active, setActive] = useState<boolean>(false);
   const { token, id } = queryParams || {};
+  const handleChangeTimeline = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    setTabValueTimeline(newValue);
+  };
   const getLocationData = async () => {
     setLoading(true);
     setLocation(null);
     setActive(false);
     try {
       const res = await axiosInstance.get(
-        `api/device/get-timeline-location/${id}?startDate=${date?.format(
+        `api/device/get-timeline-location/${id}?locType=${valueTimeline}&startDate=${date?.format(
           "YYYY-MM-DD"
         )}&endDate=${date?.format("YYYY-MM-DD")}&token=${token}`
       );
@@ -70,7 +76,7 @@ const Page = () => {
     if (queryParams && queryParams.token && queryParams.id) {
       getLocationData();
     }
-  }, [queryParams, date, value]);
+  }, [queryParams, date, value,valueTimeline]);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
@@ -86,7 +92,13 @@ const Page = () => {
       component: <Navigate data={location} />,
     },
     {
-      component: <Timeline data={location} />,
+      component: (
+        <Timeline
+          data={location}
+          handleChange={handleChangeTimeline}
+          valueTimeline={valueTimeline}
+        />
+      ),
     },
   ];
   const getBatteryStatus = (batterySoc: any) => {
@@ -136,12 +148,10 @@ const Page = () => {
                     {location?.device?.chargingStatus === 0 ? (
                       <Grid container alignItems={"center"}>
                         Battery :
-                        <Tooltip title={batteryInfo.percent} >
+                        <Tooltip title={batteryInfo.percent}>
                           <Button
                             size="small"
-                            
-                            sx={{ color: batteryInfo.color ,ml:1}}
-                           
+                            sx={{ color: batteryInfo.color, ml: 1 }}
                             startIcon={
                               <GiCarBattery color={batteryInfo.color} />
                             }
