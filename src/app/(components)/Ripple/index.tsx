@@ -28,7 +28,7 @@ export default function RippleComp ({ location, getLocationData }: any) {
   const handleDisableConfirm = async () => {
     try {
       const response = await fetch(
-        `https://api.trulynk.org/api/device/sos-off/${location?.device?._id}`,
+       `https://apitrack.psiborg.io/device/sos-off/${location?.device?._id}`,
         {
           method: "PATCH",
           headers: {
