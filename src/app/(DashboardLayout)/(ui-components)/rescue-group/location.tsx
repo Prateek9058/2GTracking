@@ -4,6 +4,7 @@ import Googlemap from "@/app/(components)/mui-components/Google_map/Googlemap";
 import markerImg from "../../../../../public/Img/marker.png";
 import useCurrentLocation from "@/app/(libs)/useCurrentLocation";
 import Image from "next/image";
+import NoData from "../../../../../public/Img/nodata.png";
 import moment from "moment";
 interface Props {
   data: any;
@@ -31,12 +32,7 @@ const Location: React.FC<Props> = ({ data }) => {
         ) : (
           <>
             <Grid container justifyContent={"center"} alignItems={"center"}>
-              <Image
-                src={"/img/noData.png"}
-                height={400}
-                width={400}
-                alt={""}
-              />
+              <Image src={NoData} height={400} width={400} alt={""} />
             </Grid>
           </>
         )}
