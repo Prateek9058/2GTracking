@@ -66,8 +66,33 @@ export default function RippleComp({ location, getLocationData }: any) {
     }
   };
 
+  console.log("loca", location);
   useEffect(() => {
-    const newSocket = io("https://api.trulynk.org/");
+    const newSocket = io("https://apitrack.psiborg.io");
+
+    newSocket.on("connect", () => {
+      console.log("Socket event: connect", newSocket?.connected, newSocket?.id);
+    });
+
+    newSocket.on("reconnect_attempt", () => {
+      console.log("Socket event: reconnect_attempt");
+    });
+
+    newSocket.on("reconnect_error", (error: Error) => {
+      console.log("Socket event: reconnect_error", error);
+    });
+
+    newSocket.on("connect_error", (error: Error) => {
+      console.log("Socket event: connect_error", error);
+    });
+
+    newSocket.on("error", (error: Error) => {
+      console.log("Socket event: error", error);
+    });
+
+    newSocket.on("disconnect", (reason: string) => {
+      console.log("Socket event: disconnect", reason);
+    });
     setSocket(newSocket);
     newSocket?.emit("joinRoom", {
       deviceId: location?.device?._id,

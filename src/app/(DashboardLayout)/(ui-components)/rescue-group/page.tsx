@@ -18,7 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { useQueryParams } from "./useQueryParams"; // Import the custom hook
+import { useQueryParams } from "./useQueryParams";
 import { BsBatteryCharging } from "react-icons/bs";
 import RippleComponent from "@/app/(components)/Ripple";
 import { PiBatteryEmptyFill } from "react-icons/pi";
@@ -76,17 +76,18 @@ const Page = () => {
     if (queryParams && queryParams.token && queryParams.id) {
       getLocationData();
     }
-  }, [queryParams, date, value,valueTimeline]);
+  }, [queryParams, date, value, valueTimeline]);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
+  // console.log("data", location?.device?.lastDeviceData);
   const TabPanelList = [
     {
       component: <Location data={location} />,
     },
     {
-      component: <SOSHistory />,
+      component: <SOSHistory id={id} date1={location?.device?.lastDeviceData} />,
     },
     {
       component: <Navigate data={location} />,
@@ -174,15 +175,17 @@ const Page = () => {
                     </Typography> */}
                   </Grid>
                   <Grid item className="datePicker">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker"]}>
-                        <DatePicker
-                          label="Select date"
-                          value={date}
-                          onChange={(newValue) => setDate(newValue)}
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
+                    {value === 0 && (
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={["DatePicker"]}>
+                          <DatePicker
+                            label="Select date"
+                            value={date}
+                            onChange={(newValue) => setDate(newValue)}
+                          />
+                        </DemoContainer>
+                      </LocalizationProvider>
+                    )}
                   </Grid>
                 </Grid>
                 <Tabs

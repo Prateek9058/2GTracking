@@ -31,15 +31,14 @@ const Timeline: React.FC<Props> = ({ data, handleChange, valueTimeline }) => {
       component: <ESim data={data} />,
     },
   ];
-  const [timeLineLoc, setTimeLineLoc] = useState<any>();
 
-  if (!data || data?.filteredLocations?.length === 0 || !location) {
-    return (
-      <Grid container mt={4} justifyContent={"center"}>
-        <Typography variant="h4"> No data found</Typography>
-      </Grid>
-    );
-  }
+  // if (!data || data?.filteredLocations?.length === 0 || !location) {
+  //   return (
+  //     <Grid container mt={4} justifyContent={"center"}>
+  //       <Typography variant="h4"> No data found</Typography>
+  //     </Grid>
+  //   );
+  // }
 
   return (
     <>

@@ -1,19 +1,47 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import ShareLocationIcon from "@mui/icons-material/ShareLocation";
-import { Grid, Typography, Button, IconButton } from "@mui/material";
+import React, { useState, useEffect, memo } from "react";
+import { Grid, Typography, Button, styled } from "@mui/material";
 import CustomTable from "@/app/(components)/mui-components/Table/customTable";
-import CustomTextField from "@/app/(components)/mui-components/Text-Field's";
 import axiosInstance from "@/app/api/axiosInstance";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import moment from "moment";
 import TableSkeleton from "@/app/(components)/mui-components/Skeleton/tableSkeleton";
-// import CommonDatePicker from "@/app/(components)/mui-components/Text-Field's/Date-range-Picker";
 import { saveAs } from "file-saver";
 import Papa from "papaparse";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-// import MapLocation from "@/app/(components)/mui-components/Dialog/location/mapPopup";
-export default function Tableprofile() {
+import CommonDatePicker from "@/app/(components)/mui-components/Text-Field's/Date-range-Picker/index";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
+import dayjs from "dayjs";
+
+const StyleTime = styled(TimePicker)(({ theme }) => ({
+  "& .MuiOutlinedInput-root": {
+    fontSize: "0.875rem",
+    height: "38px",
+  },
+  "& .MuiInputBase-input": {
+    padding: "0 8px",
+  },
+  "& .MuiFormLabel-root": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "12px",
+    fontSize: "0.875rem",
+  },
+  "& .MuiIconButton-root": {
+    width: "35px",
+    height: "35px",
+  },
+  "& .MuiSvgIcon-root": {
+    fontSize: "1rem",
+  },
+}));
+
+type GetDataHandler = (state: any, resultArray: any) => void;
+export default function Tableprofile({ id, date1 }: any) {
   const { deviceProfile } = useParams<{ deviceProfile: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = React.useState<number>(0);
@@ -22,24 +50,47 @@ export default function Tableprofile() {
   const [date, setDate] = useState<any>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedLocation, setSelectedLocation] = useState<any>(null);
+  const searchParams1 = useSearchParams();
+  const [startDate, setStartDate] = React.useState<any>(moment());
+  const [endDate, setEndDate] = React.useState<any>(moment(date1));
+  const [StartTime, setStartTime] = useState<any>(null);
+  const [EndTime, setEndTime] = useState<any>(null);
+  // const id = searchParams1.get("id");
+  // console.log("id=====>", id, deviceProfile);
 
   const handleClickOpenMap = (location: any) => {
     setSelectedLocation(location);
     setOpen(true);
   };
 
-  const getDataFromChildHandler = (date: any, dataArr: any) => {
-    setDate(date);
+  const handleStartTimeChange = (newValue: any) => {
+    setStartTime(newValue);
   };
+  const handleEndTimeChange = (newValue: any) => {
+    setEndTime(newValue);
+    console.log("Selected Time:", newValue?.format("HH:mm:ss"));
+  };
+  console.log("start Time:", dayjs(EndTime)?.format("HH:mm:ss"));
+
+  const getDataFromChildHandler: GetDataHandler = (state, resultArray) => {
+    const startDate = moment(state?.[0]?.startDate);
+    const endDate = moment(state?.[0]?.endDate);
+    setStartDate(startDate);
+    setEndDate(endDate);
+  };
+  console.log("id===>", id);
+
   const getSosHistory = async () => {
     setLoading(true);
     try {
       const res = await axiosInstance.get(
-        `api/device/sos-history/673db449153ba646f82bdbe8?page=${
+        `api/device/sos-history/${id}?page=${
           page + 1
-        }&limit=${rowsPerPage}&startDate=${moment(date?.[0]?.startDate).format(
+        }&limit=${rowsPerPage}&startDate=${moment(startDate).format(
           "YYYY-MM-DD"
-        )}&endDate=${moment(date?.[0]?.endDate).format("YYYY-MM-DD")}`
+        )}&endDate=${moment(endDate).format("YYYY-MM-DD")}&startTime=${
+          StartTime === null ? "" : dayjs(StartTime)?.format("HH:mm:ss")
+        }&endTime=${EndTime === null ? "" : dayjs(EndTime)?.format("HH:mm:ss")}`
       );
 
       if (res?.status === 200 || 201) {
@@ -53,7 +104,7 @@ export default function Tableprofile() {
   };
   useEffect(() => {
     getSosHistory();
-  }, [page, rowsPerPage, date]);
+  }, [page, rowsPerPage, date, startDate, endDate, StartTime, EndTime]);
   const columns = [
     "Sno.",
     "Value",
@@ -63,11 +114,7 @@ export default function Tableprofile() {
   const getFormattedData = (data: any[]) => {
     return data?.map((item, index) => ({
       sno: index + 1,
-      // SOS: (
-      //   <Typography variant="h6" style={{ color: item?.SOS ? "red" : "green" }}>
-      //     {item?.SOS ? "True" : "False"}
-      //   </Typography>
-      // ),
+
       currentValue:
         item?.type === "Location"
           ? `${
@@ -184,10 +231,39 @@ export default function Tableprofile() {
                   Download csv
                 </Button>
               </Grid>
+              <Grid item className="customSearch" mr={1} width={"150px"}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <StyleTime
+                    label="Start Time"
+                    value={StartTime}
+                    onChange={handleStartTimeChange}
+                    viewRenderers={{
+                      hours: renderTimeViewClock,
+                      minutes: renderTimeViewClock,
+                      seconds: renderTimeViewClock,
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item className="customSearch" mr={1} width={"150px"}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <StyleTime
+                    label="End time"
+                    value={EndTime}
+                    onChange={handleEndTimeChange}
+                    viewRenderers={{
+                      hours: renderTimeViewClock,
+                      minutes: renderTimeViewClock,
+                      seconds: renderTimeViewClock,
+                    }}
+                    disabled={!StartTime}
+                  />
+                </LocalizationProvider>
+              </Grid>
               <Grid item className="customSearch">
-                {/* <CommonDatePicker
+                <CommonDatePicker
                   getDataFromChildHandler={getDataFromChildHandler}
-                /> */}
+                />
               </Grid>
             </Grid>
           </Grid>
