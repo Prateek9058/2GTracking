@@ -37,33 +37,32 @@ const Location: React.FC<Props> = ({ data }) => {
           </>
         )}
       </Grid>
-      {data?.device?.location?.lat ||
-        (data?.device?.location?.lon && (
-          <Grid container spacing={2} p={2}>
-            <Grid item>
-              <Image src={markerImg} alt={"marker kids terack"} />
-            </Grid>
-            <Grid item>
-              <Typography variant="h4" color="primary">
-                Last updated at
-              </Typography>
-
-              <Typography mb={1} variant="body2" color="info">
-                {cureentLoc ? cureentLoc : "N/A"}
-              </Typography>
-              <Typography variant="h5" color="primary">
-                Type :
-                {data?.device?.location?.locType === "SIM_LOC" ? "SIM" : "GPS"}
-              </Typography>
-              <Typography variant="h5" color="primary">
-                date :
-                {data?.device?.lastDeviceDataLocation
-                  ? moment(data?.device?.lastDeviceDataLocation).format("lll")
-                  : " --"}
-              </Typography>
-            </Grid>
+      {(data?.device?.location?.lat || data?.device?.location?.lat) && (
+        <Grid container spacing={2} p={2}>
+          <Grid item>
+            <Image src={markerImg} alt={"marker kids terack"} />
           </Grid>
-        ))}
+          <Grid item>
+            <Typography variant="h4" color="primary">
+              Last updated at
+            </Typography>
+
+            <Typography mb={1} variant="body2" color="info">
+              {cureentLoc ? cureentLoc : "N/A"}
+            </Typography>
+            <Typography variant="h5" color="primary">
+              Type :
+              {data?.device?.location?.locType === "SIM_LOC" ? "SIM" : "GPS"}
+            </Typography>
+            <Typography variant="h5" color="primary">
+              date :
+              {data?.device?.lastDeviceDataLocation
+                ? moment(data?.device?.lastDeviceDataLocation).format("lll")
+                : " --"}
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -31,7 +31,7 @@ const Navigate: React.FC<Props> = ({ data }) => {
     );
   }
 
-  const { lat, lon } = data?.device?.location?data?.device?.location:"";
+  const { lat, lon } = data?.device?.location ? data?.device?.location : "";
   const currentLoc = data?.device?.location?.placeName;
   const currentPlaceName = location?.placeName;
   const route = {
