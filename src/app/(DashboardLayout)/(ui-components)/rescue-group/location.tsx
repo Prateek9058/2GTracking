@@ -4,6 +4,7 @@ import Googlemap from "@/app/(components)/mui-components/Google_map/Googlemap";
 import markerImg from "../../../../../public/Img/marker.png";
 import useCurrentLocation from "@/app/(libs)/useCurrentLocation";
 import Image from "next/image";
+import moment from "moment";
 interface Props {
   data: any;
 }
@@ -30,7 +31,7 @@ const Location: React.FC<Props> = ({ data }) => {
         </Grid>
         <Grid item>
           <Typography variant="h4" color="primary">
-            Current Location
+            Last updated at
           </Typography>
 
           <Typography mb={1} variant="body2" color="info">
@@ -39,6 +40,12 @@ const Location: React.FC<Props> = ({ data }) => {
           <Typography variant="h5" color="primary">
             Type :
             {data?.device?.location?.locType === "SIM_LOC" ? "SIM" : "GPS"}
+          </Typography>
+          <Typography variant="h5" color="primary">
+            date :
+            {data?.device?.lastDeviceDataLocation
+              ? moment(data?.device?.lastDeviceDataLocation).format("lll")
+              : " --"}
           </Typography>
         </Grid>
       </Grid>

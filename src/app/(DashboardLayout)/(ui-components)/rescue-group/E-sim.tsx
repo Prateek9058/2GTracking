@@ -28,7 +28,7 @@ const Timeline: React.FC<Props> = ({ data }) => {
       item.currentValue.lon
     ),
   }));
-  
+
   const route = {
     start: {
       lat: data.filteredLocations[0].currentValue.lat,
@@ -46,7 +46,7 @@ const Timeline: React.FC<Props> = ({ data }) => {
     waypoints,
   };
   return (
-    <Grid container mt={3} gap={2} >
+    <Grid container mt={3} gap={2}>
       <Grid item xs={12} md={8}>
         <Googlemap route={route} timeLineLoc={timeLineLoc} />
       </Grid>

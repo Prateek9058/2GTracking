@@ -23,18 +23,19 @@ import { BsBatteryCharging } from "react-icons/bs";
 import RippleComponent from "@/app/(components)/Ripple";
 import { PiBatteryEmptyFill } from "react-icons/pi";
 import { GiCarBattery } from "react-icons/gi";
+import moment from "moment";
 
 interface TabData {
   label: string;
 }
 
 const tabs: TabData[] = [
-  { label: "Live location" },
+  { label: "location" },
   { label: "SOS History" },
   { label: "Navigation" },
   { label: "Timeline" },
 ];
-
+type GetDataHandler = (state: any, resultArray: any) => void;
 const Page = () => {
   const queryParams = useQueryParams();
   const [value, setTabValue] = useState<number>(0);
@@ -43,12 +44,20 @@ const Page = () => {
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [location, setLocation] = useState<any>(null);
   const [active, setActive] = useState<boolean>(false);
+  const [startDate, setStartDate] = React.useState<any>(moment());
+  const [endDate, setEndDate] = React.useState<any>(moment());
   const { token, id } = queryParams || {};
   const handleChangeTimeline = (
     event: React.SyntheticEvent,
     newValue: number
   ) => {
     setTabValueTimeline(newValue);
+  };
+  const getDataFromChildHandler: GetDataHandler = (state, resultArray) => {
+    const startDate = moment(state?.[0]?.startDate);
+    const endDate = moment(state?.[0]?.endDate);
+    setStartDate(startDate);
+    setEndDate(endDate);
   };
   const getLocationData = async () => {
     setLoading(true);
@@ -87,7 +96,9 @@ const Page = () => {
       component: <Location data={location} />,
     },
     {
-      component: <SOSHistory id={id} date1={location?.device?.lastDeviceData} />,
+      component: (
+        <SOSHistory id={id} date1={location?.device?.lastDeviceData} />
+      ),
     },
     {
       component: <Navigate data={location} />,
@@ -175,7 +186,7 @@ const Page = () => {
                     </Typography> */}
                   </Grid>
                   <Grid item className="datePicker">
-                    {value === 0 && (
+                    {value === 3 && (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={["DatePicker"]}>
                           <DatePicker

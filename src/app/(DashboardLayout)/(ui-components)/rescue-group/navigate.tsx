@@ -62,7 +62,7 @@ const Navigate: React.FC<Props> = ({ data }) => {
             >
               {" "}
               <Typography variant="h4" color="primary">
-                Your Location
+                My Location
               </Typography>
               <Typography mb={2} variant="body2" color="info">
                 {currentPlaceName ? currentPlaceName : "N/A"}
