@@ -24,31 +24,35 @@ const Timeline: React.FC<Props> = ({ data }) => {
   }
   const waypoints = data.filteredLocations.slice(1, -1).map((item: any) => ({
     location: new google.maps.LatLng(
-      item.currentValue.lat,
-      item.currentValue.lon
+      item?.currentValue?.lat,
+      item?.currentValue?.lon
     ),
   }));
 
   const route = {
     start: {
-      lat: data.filteredLocations[0].currentValue.lat,
-      lon: data.filteredLocations[0].currentValue.lon,
-      place: data.filteredLocations[0].placeName,
+      lat: data?.filteredLocations[0]?.currentValue?.lat,
+      lon: data?.filteredLocations[0]?.currentValue.lon,
+      place: data?.filteredLocations[0]?.placeName,
     },
     end: {
-      lat: data.filteredLocations[data.filteredLocations.length - 1]
+      lat: data?.filteredLocations[data?.filteredLocations?.length - 1]
         .currentValue.lat,
-      lon: data.filteredLocations[data.filteredLocations.length - 1]
-        .currentValue.lon,
+      lon: data?.filteredLocations[data.filteredLocations?.length - 1]
+        ?.currentValue?.lon,
       place:
-        data.filteredLocations[data.filteredLocations.length - 1].placeName,
+        data?.filteredLocations[data?.filteredLocations?.length - 1]?.placeName,
     },
     waypoints,
   };
   return (
     <Grid container mt={3} gap={2}>
       <Grid item xs={12} md={8}>
-        <Googlemap route={route} timeLineLoc={timeLineLoc} />
+        {route ? (
+          <Googlemap route={route} timeLineLoc={timeLineLoc} />
+        ) : (
+          "Nodsd"
+        )}
       </Grid>
       <Grid item md={3.8}>
         <Stack sx={{ width: "100%", bgcolor: "#6D6ED1" }}>

@@ -18,37 +18,56 @@ const Location: React.FC<Props> = ({ data }) => {
       </Grid>
     );
   }
-  const { lat, lon } = data?.device?.location;
+  const { lat, lon } = data?.device?.location ? data?.device?.location : "";
   const cureentLoc = data?.device?.location?.placeName;
   return (
     <Grid container mt={3}>
       <Grid item xs={12}>
-        <Googlemap data={{ lat, lon, locationName: cureentLoc }} route={null} />
+        {data?.device?.location?.lat || data?.device?.location?.lon ? (
+          <Googlemap
+            data={{ lat, lon, locationName: cureentLoc }}
+            route={null}
+          />
+        ) : (
+          <>
+            <Grid container justifyContent={"center"} alignItems={"center"}>
+              <Image
+                src={"/img/noData.png"}
+                height={400}
+                width={400}
+                alt={""}
+              />
+            </Grid>
+          </>
+        )}
       </Grid>
-      <Grid container spacing={2} p={2}>
-        <Grid item>
-          <Image src={markerImg} alt={"marker kids terack"} />
-        </Grid>
-        <Grid item>
-          <Typography variant="h4" color="primary">
-            Last updated at
-          </Typography>
+      {data?.device?.location?.lat ||
+        (data?.device?.location?.lon && (
+          <Grid container spacing={2} p={2}>
+            <Grid item>
+              <Image src={markerImg} alt={"marker kids terack"} />
+            </Grid>
+            <Grid item>
+              <Typography variant="h4" color="primary">
+                Last updated at
+              </Typography>
 
-          <Typography mb={1} variant="body2" color="info">
-            {cureentLoc ? cureentLoc : "N/A"}
-          </Typography>
-          <Typography variant="h5" color="primary">
-            Type :
-            {data?.device?.location?.locType === "SIM_LOC" ? "SIM" : "GPS"}
-          </Typography>
-          <Typography variant="h5" color="primary">
-            date :
-            {data?.device?.lastDeviceDataLocation
-              ? moment(data?.device?.lastDeviceDataLocation).format("lll")
-              : " --"}
-          </Typography>
-        </Grid>
-      </Grid>
+              <Typography mb={1} variant="body2" color="info">
+                {cureentLoc ? cureentLoc : "N/A"}
+              </Typography>
+              <Typography variant="h5" color="primary">
+                Type :
+                {data?.device?.location?.locType === "SIM_LOC" ? "SIM" : "GPS"}
+              </Typography>
+              <Typography variant="h5" color="primary">
+                date :
+                {data?.device?.lastDeviceDataLocation
+                  ? moment(data?.device?.lastDeviceDataLocation).format("lll")
+                  : " --"}
+              </Typography>
+            </Grid>
+          </Grid>
+        ))}
     </Grid>
   );
 };

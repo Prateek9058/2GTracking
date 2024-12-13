@@ -31,7 +31,7 @@ const Navigate: React.FC<Props> = ({ data }) => {
     );
   }
 
-  const { lat, lon } = data?.device?.location;
+  const { lat, lon } = data?.device?.location?data?.device?.location:"";
   const currentLoc = data?.device?.location?.placeName;
   const currentPlaceName = location?.placeName;
   const route = {
@@ -46,7 +46,7 @@ const Navigate: React.FC<Props> = ({ data }) => {
   return (
     <Grid container mt={3}>
       <Grid item xs={12}>
-        <Googlemap route={route} />
+        {route ? <Googlemap route={route} /> : "No location found"}
       </Grid>
       <Stack sx={{ width: "100%", mt: 3 }}>
         <Stepper activeStep={0} alternativeLabel>

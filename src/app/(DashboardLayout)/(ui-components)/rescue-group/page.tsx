@@ -192,6 +192,7 @@ const Page = () => {
                           <DatePicker
                             label="Select date"
                             value={date}
+                            format="DD/MM/YYYY"
                             onChange={(newValue) => setDate(newValue)}
                           />
                         </DemoContainer>
